@@ -7,16 +7,21 @@ public class Influencer extends User {
     private Stats stats = new Stats();
     private final String name;
     private Contract[] contracts = new Contract[10];
-    private BrandManager[] partneredBrands = new BrandManager[10];
+   
     private int contractCount = 0;
     private int brandCount = 0;
+    Influencer(String username, String password, String email, String role){
+super(username,password,email,role);
+this.name =username;
+  this.niches = new Niche[3];
+    }
     
     public static final String[] VALID_NICHES = { "FASHION", "TECH", "FOOD", "TRAVEL", "GAMING", "FITNESS"};
 
-    public Influencer(String name) {
-        this.niches = new Niche[3];
-        this.name = name;
-    }
+    //public Influencer(String name) {
+      //
+     //   this.name = name;
+   // }
 
     public void addContract(Contract contract) {
         if (contractCount == contracts.length) {
@@ -27,22 +32,7 @@ public class Influencer extends User {
         contracts[contractCount++] = contract;
     }
 
-    public void addPartneredBrand(BrandManager brandManager) {
-        // Check if already partnered
-        for (int i = 0; i < brandCount; i++) {
-            if (partneredBrands[i].equals(brandManager)) {
-                return;
-            }
-        }
-        
-        if (brandCount == partneredBrands.length) {
-            BrandManager[] newArray = new BrandManager[partneredBrands.length * 2];
-            System.arraycopy(partneredBrands, 0, newArray, 0, partneredBrands.length);
-            partneredBrands = newArray;
-        }
-        
-        partneredBrands[brandCount++] = brandManager;
-    }
+   
 
     public Contract[] getContracts() {
         Contract[] result = new Contract[contractCount];
