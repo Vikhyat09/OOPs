@@ -5,32 +5,39 @@ import java.util.Objects;
 public class Influencer extends User {
     private Niche[] niches = new Niche[3];
     private Stats stats = new Stats(); // Each influencer has its own Stats
-    private final String name;
-    private Contract[] contracts = new Contract[10];
-    private int contractCount = 0;
+  private final String name;
+        private Contract[] contracts = new Contract[10]; // Initial capacity
+        private int contractCount = 0;
 
-    public Influencer(String name) {
-        this.name = name;
-    }
+        public Influencer(String name) {
+            this.name = name;
+        }
 
-    public void addContract(Contract contract) {
-        if (contractCount == contracts.length) {
-            Contract[] newArray = new Contract[contracts.length * 2];
-            for (int i = 0; i < contracts.length; i++) {
-                newArray[i] = contracts[i];
+        public void addContract(Contract contract) {
+            // Resize array if needed
+            if (contractCount == contracts.length) {
+                Contract[] newArray = new Contract[contracts.length * 2];
+                System.arraycopy(contracts, 0, newArray, 0, contracts.length);
+                contracts = newArray;
             }
-            contracts = newArray;
+            contracts[contractCount++] = contract;
         }
-        contracts[contractCount++] = contract;
-    }
 
-    public Contract[] getContracts() {
-        Contract[] result = new Contract[contractCount];
-        for (int i = 0; i < contractCount; i++) {
-            result[i] = contracts[i];
+        public Contract[] getContracts() {
+            Contract[] result = new Contract[contractCount];
+            System.arraycopy(contracts, 0, result, 0, contractCount);
+            return result;
         }
-        return result;
-    }
+
+        public void receiveContract(Contract contract) {
+            System.out.println(name + " received contract #" + contract.getId());
+        }
+
+        public void respondToContract(Contract contract, boolean accept) {
+            contract.influencerResponds(accept);
+        }
+
+        public String getName() { return name; }
 
     // ----------------------------
     // Nested Stats Class (properly encapsulated)
