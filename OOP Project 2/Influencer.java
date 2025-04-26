@@ -3,7 +3,7 @@ package com.influencer.platform;
 import java.util.Objects;
 
 public class Influencer extends User {
-    private Niche[] niches = new Niche[3];
+    private Niche[] niches ;
     private Stats stats = new Stats(); // Each influencer has its own Stats
   private final String name;
         private Contract[] contracts = new Contract[10]; // Initial capacity
@@ -11,6 +11,7 @@ public class Influencer extends User {
     public static final String[] VALID_NICHES = { "FASHION", "TECH", "FOOD", "TRAVEL", "GAMING", "FITNESS"};
 
         public Influencer(String name) {
+            this.niches = new Niche[3];
             this.name = name;
         }
 
