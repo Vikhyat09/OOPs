@@ -6,6 +6,7 @@ public class BrandManager extends User {
         private double availableBudget;
         private Contract[] contracts = new Contract[10]; // Initial capacity
         private int contractCount = 0;
+        public static final String[] VALID_NICHES = { "FASHION", "TECH", "FOOD", "TRAVEL", "GAMING", "FITNESS"};
 
         public BrandManager(String name, double budget) {
             this.name = name;
