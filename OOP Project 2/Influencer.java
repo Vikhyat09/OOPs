@@ -205,6 +205,18 @@ public class Influencer extends User {
     }
 
     // ----------------------------
+// Get Analytics Summary
+// ----------------------------
+public String getAnalytics() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Total Engagement: ").append(getSumOfEngagement()).append("\n");
+    sb.append("Average Demographic: ").append(getAvgOfDemographic()).append("\n");
+    sb.append("Total Audience Size: ").append(getSumOfAudienceSize()).append("\n");
+    return sb.toString();
+}
+
+
+    // ----------------------------
     // Other Methods
     // ----------------------------
     public void acceptCampaign(Campaign c) {
