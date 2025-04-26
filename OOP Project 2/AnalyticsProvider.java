@@ -37,7 +37,31 @@ public interface AnalyticsProvider {
           double totalengagement;
           Influencer[] newArray=Arrays.copyof(man.getParteneredInfluencers,man.getParteneredInfluencers.length);
           for(int i =0;i<man.getParteneredInfluencers.length;i++){
+               totalengagement+=newArray[i].Stats.engagement[0];
+          }
+          return totalengagement;
+     }
+     public double instagramEngagementBrand(BrandManager man){
+          double totalengagement;
+          Influencer[] newArray=Arrays.copyof(man.getParteneredInfluencers,man.getParteneredInfluencers.length);
+          for(int i =0;i<man.getParteneredInfluencers.length;i++){
                totalengagement+=newArray[i].Stats.engagement[1];
+          }
+          return totalengagement;
+     }
+     public double youtubeEngagementBrand(BrandManager man){
+          double totalengagement;
+          Influencer[] newArray=Arrays.copyof(man.getParteneredInfluencers,man.getParteneredInfluencers.length);
+          for(int i =0;i<man.getParteneredInfluencers.length;i++){
+               totalengagement+=newArray[i].Stats.engagement[2];
+          }
+          return totalengagement;
+     }
+     public double tiktokrEngagementBrand(BrandManager man){
+          double totalengagement;
+          Influencer[] newArray=Arrays.copyof(man.getParteneredInfluencers,man.getParteneredInfluencers.length);
+          for(int i =0;i<man.getParteneredInfluencers.length;i++){
+               totalengagement+=newArray[i].Stats.engagement[3];
           }
           return totalengagement;
      }
