@@ -5,7 +5,34 @@ import java.util.Objects;
 public class Influencer extends User {
     private Niche[] niches = new Niche[3];
     private Stats stats = new Stats(); // Each influencer has its own Stats
+ private final String name;
+        private Contract[] contracts = new Contract[10];
+        private int contractCount = 0;
 
+        public Influencer(String name) {
+            this.name = name;
+        }
+
+        public void addContract(Contract contract) {
+            if (contractCount == contracts.length) {
+                Contract[] newArray = new Contract[contracts.length * 2];
+                // Replace arraycopy with manual copy
+                for (int i = 0; i < contracts.length; i++) {
+                    newArray[i] = contracts[i];
+                }
+                contracts = newArray;
+            }
+            contracts[contractCount++] = contract;
+        }
+
+        public Contract[] getContracts() {
+            Contract[] result = new Contract[contractCount];
+            // Replace arraycopy with manual copy
+            for (int i = 0; i < contractCount; i++) {
+                result[i] = contracts[i];
+            }
+            return result;
+        }
     // ----------------------------
     // Nested Stats Class (now properly encapsulated)
     // ----------------------------
