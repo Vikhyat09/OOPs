@@ -8,6 +8,7 @@ public class Influencer extends User {
   private final String name;
         private Contract[] contracts = new Contract[10]; // Initial capacity
         private int contractCount = 0;
+    public static final String[] VALID_NICHES = { "FASHION", "TECH", "FOOD", "TRAVEL", "GAMING", "FITNESS"};
 
         public Influencer(String name) {
             this.name = name;
@@ -143,13 +144,16 @@ public class Influencer extends User {
         niches[2] = third;
     }
 
-    private void validateNiche(Niche niche) {
-        for (Niche valid : Niche.VALID_NICHES) {
-            if (niche == valid) return;
+    private void validateNiche(String niche) {
+    for (String valid : VALID_NICHES) {
+        if (valid.equalsIgnoreCase(niche)) {
+            return; // found valid
         }
-        throw new IllegalArgumentException("Invalid niche: " + niche +
-                ". Valid niches: " + java.util.Arrays.toString(Niche.VALID_NICHES));
     }
+    throw new IllegalArgumentException("Invalid niche: " + niche +
+            ". Valid niches are: " + java.util.Arrays.toString(VALID_NICHES));
+    }
+
 
     // ----------------------------
     // Controlled Stats Update (only Admin)
