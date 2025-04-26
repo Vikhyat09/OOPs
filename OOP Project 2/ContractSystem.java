@@ -23,9 +23,58 @@ public class ContractSystem {
             this.paymentAmount = paymentAmount;
             this.status = ContractStatus.PENDING;
             
+            // Add to both parties' contract arrays
             brandManager.addContract(this);
             influencer.addContract(this);
         }
 
-        // ... (other Contract methods remain the same)
+        public void sendToInfluencer() {
+            System.out.println("\nContract #" + contractId + " sent to " + influencer.getName());
+            influencer.receiveContract(this);
+        }
+
+        public void influencerResponds(boolean accepted) {
+            if (status != ContractStatus.PENDING) {
+                System.out.println("Contract already processed");
+                return;
+            }
+
+            if (accepted) {
+                status = ContractStatus.ACCEPTED;
+                System.out.println(influencer.getName() + " accepted contract #" + contractId);
+                brandManager.reviewAcceptedContract(this);
+            } else {
+                status = ContractStatus.REJECTED;
+                System.out.println(influencer.getName() + " rejected contract #" + contractId);
+            }
+        }
+
+        public void brandManagerVerifiesBudget(double availableBudget) {
+            if (status != ContractStatus.ACCEPTED) {
+                System.out.println("Cannot verify budget - contract not accepted");
+                return;
+            }
+
+            if (paymentAmount <= availableBudget) {
+                status = ContractStatus.SUCCEEDED;
+                System.out.println("Contract #" + contractId + " succeeded! Budget approved.");
+            } else {
+                status = ContractStatus.FAILED;
+                System.out.println("Contract #" + contractId + " failed! Insufficient budget.");
+            }
+        }
+
+        public void displayContractDetails() {
+            System.out.println("\n=== Contract #" + contractId + " ===");
+            System.out.println("Brand Manager: " + brandManager.getName());
+            System.out.println("Influencer: " + influencer.getName());
+            System.out.println("Duration: " + startDate + " to " + endDate);
+            System.out.println("Payment: $" + paymentAmount);
+            System.out.println("Status: " + status);
+        }
+
+        public int getId() { return contractId; }
+        public double getPaymentAmount() { return paymentAmount; }
+        public ContractStatus getStatus() { return status; }
     }
+
