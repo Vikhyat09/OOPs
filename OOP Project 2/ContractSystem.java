@@ -1,3 +1,5 @@
+import java.util.Date;
+
 public class ContractSystem {
     public enum ContractStatus {
         PENDING, ACCEPTED, REJECTED, SUCCEEDED, FAILED
@@ -26,6 +28,23 @@ public class ContractSystem {
             // Add to both parties' contract arrays
             brandManager.addContract(this);
             influencer.addContract(this);
+        }
+
+        // Added getters for all fields
+        public BrandManager getBrandManager() {
+            return brandManager;
+        }
+
+        public Influencer getInfluencer() {
+            return influencer;
+        }
+
+        public Date getStartDate() {
+            return startDate;
+        }
+
+        public Date getEndDate() {
+            return endDate;
         }
 
         public void sendToInfluencer() {
@@ -58,6 +77,9 @@ public class ContractSystem {
             if (paymentAmount <= availableBudget) {
                 status = ContractStatus.SUCCEEDED;
                 System.out.println("Contract #" + contractId + " succeeded! Budget approved.");
+                // Add to partnered lists if succeeded
+                brandManager.addPartneredInfluencer(influencer);
+                influencer.addPartneredBrand(brandManager);
             } else {
                 status = ContractStatus.FAILED;
                 System.out.println("Contract #" + contractId + " failed! Insufficient budget.");
@@ -77,4 +99,5 @@ public class ContractSystem {
         public double getPaymentAmount() { return paymentAmount; }
         public ContractStatus getStatus() { return status; }
     }
+}
 
