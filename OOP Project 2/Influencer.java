@@ -3,46 +3,71 @@ package com.influencer.platform;
 import java.util.Objects;
 
 public class Influencer extends User {
-    private Niche[] niches ;
-    private Stats stats = new Stats(); // Each influencer has its own Stats
-  private final String name;
-        private Contract[] contracts = new Contract[10]; // Initial capacity
-        private int contractCount = 0;
+    private Niche[] niches;
+    private Stats stats = new Stats();
+    private final String name;
+    private Contract[] contracts = new Contract[10];
+    private BrandManager[] partneredBrands = new BrandManager[10];
+    private int contractCount = 0;
+    private int brandCount = 0;
+    
     public static final String[] VALID_NICHES = { "FASHION", "TECH", "FOOD", "TRAVEL", "GAMING", "FITNESS"};
 
-        public Influencer(String name) {
-            this.niches = new Niche[3];
-            this.name = name;
-        }
+    public Influencer(String name) {
+        this.niches = new Niche[3];
+        this.name = name;
+    }
 
-        public void addContract(Contract contract) {
-            // Resize array if needed
-            if (contractCount == contracts.length) {
-                Contract[] newArray = new Contract[contracts.length * 2];
-                System.arraycopy(contracts, 0, newArray, 0, contracts.length);
-                contracts = newArray;
+    public void addContract(Contract contract) {
+        if (contractCount == contracts.length) {
+            Contract[] newArray = new Contract[contracts.length * 2];
+            System.arraycopy(contracts, 0, newArray, 0, contracts.length);
+            contracts = newArray;
+        }
+        contracts[contractCount++] = contract;
+    }
+
+    public void addPartneredBrand(BrandManager brandManager) {
+        // Check if already partnered
+        for (int i = 0; i < brandCount; i++) {
+            if (partneredBrands[i].equals(brandManager)) {
+                return;
             }
-            contracts[contractCount++] = contract;
         }
-
-        public Contract[] getContracts() {
-            Contract[] result = new Contract[contractCount];
-            System.arraycopy(contracts, 0, result, 0, contractCount);
-            return result;
+        
+        if (brandCount == partneredBrands.length) {
+            BrandManager[] newArray = new BrandManager[partneredBrands.length * 2];
+            System.arraycopy(partneredBrands, 0, newArray, 0, partneredBrands.length);
+            partneredBrands = newArray;
         }
+        
+        partneredBrands[brandCount++] = brandManager;
+    }
 
-        public void receiveContract(Contract contract) {
-            System.out.println(name + " received contract #" + contract.getId());
-        }
+    public Contract[] getContracts() {
+        Contract[] result = new Contract[contractCount];
+        System.arraycopy(contracts, 0, result, 0, contractCount);
+        return result;
+    }
 
-        public void respondToContract(Contract contract, boolean accept) {
-            contract.influencerResponds(accept);
-        }
+    public BrandManager[] getPartneredBrands() {
+        BrandManager[] result = new BrandManager[brandCount];
+        System.arraycopy(partneredBrands, 0, result, 0, brandCount);
+        return result;
+    }
 
-        public String getName() { return name; }
+    public void receiveContract(Contract contract) {
+        System.out.println(name + " received contract #" + contract.getId());
+    }
+
+    public void respondToContract(Contract contract, boolean accept) {
+        contract.influencerResponds(accept);
+    }
+
+    public String getName() { return name; }
 
     // ----------------------------
-    // Nested Stats Class (properly encapsulated)
+    // Nested Stats Class
     // ----------------------------
     public static class Stats {
         private Double[] engagement = new Double[4];
@@ -53,9 +78,7 @@ public class Influencer extends User {
         private double avgOfDemographic = 0;
         private long sumOfAudienceSize = 0;
 
-        // Constructor
         public Stats() {
-            // Default initialization (optional)
             for (int i = 0; i < engagement.length; i++) {
                 engagement[i] = 0.0;
                 demographic[i] = 0.0;
@@ -63,11 +86,9 @@ public class Influencer extends User {
             }
         }
 
-        // Update sums when data is set
         private void calculateSums() {
             sumOfEngagement = 0;
             sumOfDemographic = 0;
-            avgOfDemographic = 0;
             sumOfAudienceSize = 0;
 
             for (double e : engagement) {
@@ -82,7 +103,6 @@ public class Influencer extends User {
             }
         }
 
-        // Setters
         private void setEngagement(Double[] rates) {
             this.engagement = rates;
             calculateSums();
@@ -98,30 +118,12 @@ public class Influencer extends User {
             calculateSums();
         }
 
-        // Getters
-        public Double[] getEngagement() {
-            return engagement;
-        }
-
-        public Long[] getAudienceSize() {
-            return audienceSize;
-        }
-
-        public Double[] getDemographic() {
-            return demographic;
-        }
-
-        public double getSumOfEngagement() {
-            return sumOfEngagement;
-        }
-
-        public double getAvgOfDemographic() {
-            return avgOfDemographic;
-        }
-
-        public long getSumOfAudienceSize() {
-            return sumOfAudienceSize;
-        }
+        public Double[] getEngagement() { return engagement; }
+        public Long[] getAudienceSize() { return audienceSize; }
+        public Double[] getDemographic() { return demographic; }
+        public double getSumOfEngagement() { return sumOfEngagement; }
+        public double getAvgOfDemographic() { return avgOfDemographic; }
+        public long getSumOfAudienceSize() { return sumOfAudienceSize; }
     }
 
     // ----------------------------
@@ -146,25 +148,23 @@ public class Influencer extends User {
     }
 
     private void validateNiche(String niche) {
-    for (String valid : VALID_NICHES) {
-        if (valid.equalsIgnoreCase(niche)) {
-            return; // found valid
+        for (String valid : VALID_NICHES) {
+            if (valid.equalsIgnoreCase(niche)) {
+                return;
+            }
         }
+        throw new IllegalArgumentException("Invalid niche: " + niche +
+               ". Valid niches are: " + java.util.Arrays.toString(VALID_NICHES));
     }
-    throw new IllegalArgumentException("Invalid niche: " + niche +
-            ". Valid niches are: " + java.util.Arrays.toString(VALID_NICHES));
-    }
-
 
     // ----------------------------
-    // Controlled Stats Update (only Admin)
+    // Stats Methods
     // ----------------------------
     public void updateStats(Double[] engagement, Long[] audienceSize, Double[] demographic, User requester) {
         if (!(requester instanceof Admin)) {
             throw new SecurityException("Only Admin can update stats");
         }
 
-        // Temporary Stats to check validity
         double tempSumEngagement = 0;
         double tempSumDemographic = 0;
         long tempSumAudienceSize = 0;
@@ -183,54 +183,26 @@ public class Influencer extends User {
             throw new IllegalArgumentException("Stats must be positive");
         }
 
-        // Now set if everything is okay
         stats.setEngagement(engagement);
         stats.setAudienceSize(audienceSize);
         stats.setDemographic(demographic);
     }
 
-    // ----------------------------
-    // Stats Getters
-    // ----------------------------
-    public Double[] getEngagement() {
-        return stats.getEngagement();
+    public Double[] getEngagement() { return stats.getEngagement(); }
+    public Long[] getAudienceSize() { return stats.getAudienceSize(); }
+    public Double[] getDemographic() { return stats.getDemographic(); }
+    public double getSumOfEngagement() { return stats.getSumOfEngagement(); }
+    public double getAvgOfDemographic() { return stats.getAvgOfDemographic(); }
+    public long getSumOfAudienceSize() { return stats.getSumOfAudienceSize(); }
+
+    public String getAnalytics() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Total Engagement: ").append(getSumOfEngagement()).append("\n");
+        sb.append("Average Demographic: ").append(getAvgOfDemographic()).append("\n");
+        sb.append("Total Audience Size: ").append(getSumOfAudienceSize()).append("\n");
+        return sb.toString();
     }
 
-    public Long[] getAudienceSize() {
-        return stats.getAudienceSize();
-    }
-
-    public Double[] getDemographic() {
-        return stats.getDemographic();
-    }
-
-    public double getSumOfEngagement() {
-        return stats.getSumOfEngagement();
-    }
-
-    public double getAvgOfDemographic() {
-        return stats.getAvgOfDemographic();
-    }
-
-    public long getSumOfAudienceSize() {
-        return stats.getSumOfAudienceSize();
-    }
-
-    // ----------------------------
-// Get Analytics Summary
-// ----------------------------
-public String getAnalytics() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("Total Engagement: ").append(getSumOfEngagement()).append("\n");
-    sb.append("Average Demographic: ").append(getAvgOfDemographic()).append("\n");
-    sb.append("Total Audience Size: ").append(getSumOfAudienceSize()).append("\n");
-    return sb.toString();
-}
-
-
-    // ----------------------------
-    // Other Methods
-    // ----------------------------
     public void acceptCampaign(Campaign c) {
         /* Implementation */
     }
