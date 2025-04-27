@@ -26,15 +26,15 @@ public class Campaign {
     public int getEngagement() {
         return engagement;
     }
-
+// increases the engagemenr by adding the engament bought by the newly added influencer
     public void increaseEngagement(int value) {
         this.engagement += value;
     }
-
+//adds the influencer to the campaign 
     public void addInfluencer(Influencer influencer) {
         influencers.add(influencer);
     }
-
+//returns a list of all influencers in that campaign 
     public ArrayList<Influencer> getInfluencers() {
         return influencers;
     }
