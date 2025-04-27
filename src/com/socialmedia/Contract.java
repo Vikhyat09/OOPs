@@ -6,7 +6,7 @@ public class Contract {
     private Campaign campaign;
     private int offerAmount; // Monetary value of the contract
     private String status; // Accepted, Rejected, Pending
-
+// initialisies status with pending , only if the influencer accepts or rejects it , it changes .
     public Contract(BrandManager brandManager, Influencer influencer, Campaign campaign, int offerAmount) {
         this.brandManager = brandManager;
         this.influencer = influencer;
