@@ -26,7 +26,7 @@ public class Influencer extends User {
         System.out.println(getUsername() + " received a contract for campaign: " + contract.getCampaignName() +
                 " with an offer of $" + contract.getOfferAmount());
     }
-
+// view all contracts in all states accepted pending , rejected
     public void viewContracts() {
         System.out.println("Contracts received by " + getUsername() + ":");
         if (receivedContracts.isEmpty()) {
@@ -39,7 +39,7 @@ public class Influencer extends User {
             }
         }
     }
-
+    // accepts the contract from a brand -> brand looses x money , influencers gains x
     public void acceptContract(int contractIndex) {
         if (contractIndex < 0 || contractIndex >= receivedContracts.size()) {
             System.out.println("Invalid contract selection.");
@@ -65,7 +65,7 @@ public class Influencer extends User {
         System.out.println("Engagement increased by " + engagementIncrease + " for both the influencer and the campaign.");
         System.out.println("You earned $" + contract.getOfferAmount() + " from this contract.");
     }
-
+// rejects the contract from a brand
     public void rejectContract(int contractIndex) {
         if (contractIndex < 0 || contractIndex >= receivedContracts.size()) {
             System.out.println("Invalid contract selection.");
@@ -91,7 +91,7 @@ public class Influencer extends User {
     public int getFollowers() {
         return followers;
     }
-
+//prints out the details of the influencer
     public void viewDetails() {
         System.out.println("\nInfluencer Details:");
         System.out.println("Username: " + getUsername());
