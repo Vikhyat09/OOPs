@@ -155,7 +155,7 @@ public class BrandManager extends User {
         System.out.print("Enter maximum age demographic: ");
         int maxAge = Integer.parseInt(scanner.nextLine());
         
-        // Filter influencers
+        // Filter influencers based on age x-y , engagement rate > z , and specific niche
         List<Influencer> matchingInfluencers = filterInfluencers(allInfluencers, niche, 
                                                                 minEngagement, minAge, maxAge);
         
